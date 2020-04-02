@@ -43,7 +43,7 @@ ylabel('Signal Amplitude')
 legend('observed signal')
 %% --------------------------------- SSA
 % Decomposition
-M = 10;
+M = 200;
 L = length(Yobs)-M+1;
 Y = hankel(Yobs(1:M),Yobs(M:end));
 C = Y*Y';
@@ -56,7 +56,7 @@ for i = 1:M
 end
 % Rebuild by grouping
 Bv
-p = input('How much in the first group£º');
+p = input('How many of the first group: ');
 Y1 = zeros(M,L);
 Y2 = Y1;
 for j = 1:p
