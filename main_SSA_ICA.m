@@ -43,7 +43,7 @@ ylabel('Signal Amplitude')
 legend('observed signal')
 %% --------------------------------- SSA
 % Decomposition
-M = 200;
+M = 10;
 L = length(Yobs)-M+1;
 Y = hankel(Yobs(1:M),Yobs(M:end));
 C = Y*Y';
