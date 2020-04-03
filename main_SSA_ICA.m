@@ -4,11 +4,12 @@
 % Date: 2020-04-01
 % Description: This is a demo of SSA-ICA algorithm.
 % Revision / Filing Date / Modified By / Modified Content
-% V1.0 / 2020-04-01 / Pinjun Zheng / Create the program
+% V1.0 / 2020-04-01 / Pinjun Zheng / Create the program.
+% V2.0 / 2020-04-03 / Pinjun Zheng / Change to the form of calling a sub-function
 %----------------------------------------------------------------
 clc
 clear all
-%% --------------------------------- set Parameters
+%% --------------------------------- Set Parameters
 N = 1;                              %The number of observed mixtures
 Ns = 2;                             %The number of independent sources
 Ls = 1000;                          %Sample size, i.e.: number of observations
@@ -41,37 +42,12 @@ plot(timeVector,Yobs)                       %Plotting the observed signal vs. ti
 xlabel('time (s)')
 ylabel('Signal Amplitude') 
 legend('observed signal')
-%% --------------------------------- SSA
-% Decomposition
+
+%% --------------------------------- Call SSA-ICA algorithm
 M = 200;
-L = length(Yobs)-M+1;
-Y = hankel(Yobs(1:M),Yobs(M:end));
-C = Y*Y';
-[eVector,eValue] = eig(C);
-eValue = diag(eValue);     
-[Bv,Iv]=sort(eValue,'descend');
-Ysub = zeros(M,L,M);
-for i = 1:M
-    Ysub(:,:,i) = eVector(:,Iv(i))*(eVector(:,Iv(i)))'*Y;
-end
-% Rebuild by grouping
-Bv
-p = input('How many of the first group: ');
-Y1 = zeros(M,L);
-Y2 = Y1;
-for j = 1:p
-    Y1 = Y1 + Ysub(:,:,j);
-end
-for k = p+1:M
-   Y2 = Y2 + Ysub(:,:,k);
-end
-% Diagonal average
-R1 = diag_average(Y1);
-R2 = diag_average(Y2);
-Xobs = [R1;R2];
-%% --------------------------------- call FastICA algorithm
-[Sest] = Fast_ICA(Xobs,Ns);
-%% ---------------------------------  show
+Sest = SSA_ICA(Yobs,Ns,M);
+
+%% ---------------------------------  Show results
 figure
 plot(timeVector, Sest(1,:))
 xlabel('time (s)') 
